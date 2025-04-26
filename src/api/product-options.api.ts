@@ -1,5 +1,5 @@
 import api from './api';
-import {CreateProductOptionRequest, ProductOption} from '../types/api.types';
+import {CreateProductOptionRequest, ProductOption, UpdateProductOptionRequest} from '../types/api.types';
 
 export async function getProductOptions(): Promise<ProductOption[]> {
     const response = await api.get<ProductOption[]>('/product-options');
@@ -16,7 +16,7 @@ export async function createProductOption(data: CreateProductOptionRequest): Pro
     return response.data;
 }
 
-export async function updateProductOption(productOptionId: string, data: CreateProductOptionRequest): Promise<ProductOption> {
+export async function updateProductOption(productOptionId: string, data: UpdateProductOptionRequest): Promise<ProductOption> {
     const response = await api.patch<ProductOption>(`/product-options/${productOptionId}`, data);
     return response.data;
 }

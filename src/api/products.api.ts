@@ -1,10 +1,8 @@
 import api from './api';
 import {
-    CalculatePriceResponse,
     CreateProductRequest,
     Product,
     UpdateProductRequest,
-    ValidateConfigurationResponse
 } from '../types/api.types';
 
 function buildQueryParams(optionIds: string[]) {
@@ -26,26 +24,6 @@ export async function getProduct(productId: string): Promise<Product> {
 
 export async function getProductWithOptions(productId: string, optionIds: string[]): Promise<Product> {
     const response = await api.get<Product>(`/products/${productId}/with-options`, {
-            params: buildQueryParams(optionIds),
-        }
-    );
-
-    return response.data;
-}
-
-export async function validateConfiguration(productId: string, optionIds: string[]): Promise<ValidateConfigurationResponse> {
-    const response = await api.get<ValidateConfigurationResponse>(
-        `/products/${productId}/validate`, {
-            params: buildQueryParams(optionIds),
-        }
-    );
-
-    return response.data;
-}
-
-export async function calculatePrice(productId: string, optionIds: string[]): Promise<CalculatePriceResponse> {
-    const response = await api.get<CalculatePriceResponse>(
-        `/products/${productId}/price`, {
             params: buildQueryParams(optionIds),
         }
     );

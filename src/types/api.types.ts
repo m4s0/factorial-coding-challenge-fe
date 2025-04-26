@@ -60,6 +60,8 @@ export interface Product {
     categoryId: string;
     category?: ProductCategory;
     optionGroups: ProductOptionGroup[];
+    isValidConfiguration?: boolean;
+    price?: number;
     createdAt: string;
     updatedAt: string;
 }
@@ -70,6 +72,7 @@ export interface ProductOptionGroup {
     displayName: string;
     productId: string;
     product: Product;
+    options: ProductOption[];
     createdAt: string;
     updatedAt: string;
 }
@@ -163,14 +166,6 @@ export interface RegisterRequest {
     lastName: string;
 }
 
-export interface ValidateConfigurationResponse {
-    isValid: boolean;
-}
-
-export interface CalculatePriceResponse {
-    price: number;
-}
-
 export interface CreateProductRequest {
     name: string;
     description: string;
@@ -205,6 +200,62 @@ export interface Category {
     id: string;
     name: string;
     description: string;
+    isActive: boolean;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface CreateOptionRuleRequest {
+    ifOptionId: string;
+    thenOptionId: string;
+    ruleType: RuleType;
+}
+
+export interface UpdateOptionRuleRequest {
+    ifOptionId?: string;
+    thenOptionId?: string;
+    ruleType?: RuleType;
+}
+
+export enum RuleType {
+    REQUIRES = 'requires',
+    EXCLUDES = 'excludes',
+    ONLY_ALLOWS = 'only_allows',
+}
+
+export interface OptionRuleResponse {
+    id: string;
+    ruleType: RuleType;
+    ifOptionId: string;
+    ifOption?: ProductOption;
+    thenOptionId: string;
+    thenOption?: ProductOption;
+    isActive: boolean;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface CreateOptionPriceRuleRequest {
+    price: number;
+    targetOptionId: string;
+    dependentOptionId: string;
+    isActive: boolean;
+}
+
+export interface UpdateOptionPriceRuleRequest {
+    price?: number;
+    targetOptionId?: string;
+    dependentOptionId?: string;
+    isActive?: boolean;
+}
+
+export interface OptionPriceRuleResponse {
+    id: string;
+    price: number;
+    targetOptionId: string;
+    targetOption?: ProductOption;
+    dependentOptionId: string;
+    dependentOption?: ProductOption;
     isActive: boolean;
     createdAt: string;
     updatedAt: string;
