@@ -1,13 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {Alert, Box, CircularProgress, Grid, Typography} from '@mui/material';
 import {useParams} from 'react-router-dom';
-import {calculatePrice, getProduct, getProductWithOptions, validateConfiguration} from '../api/products.api';
+import {getProduct, getProductWithOptions} from '../api/products.api';
 import {
-    CalculatePriceResponse,
     Product,
     ProductOption,
     ProductOptionGroup,
-    ValidateConfigurationResponse
 } from '../types/api.types';
 import PriceSummary from '../components/configurator/PriceSummary.tsx';
 import OptionGroup from '../components/configurator/OptionGroup.tsx';
@@ -42,12 +40,8 @@ const ConfiguratorPage: React.FC = () => {
     const [product, setProduct] = useState<Product | null>(null);
     const [productOptionGroups, setProductOptionGroups] = useState<ProductOptionGroup[]>([]);
     const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
-    const [configValidation, setConfigValidation] = useState<ValidateConfigurationResponse>({
-        isValid: false,
-    });
-    const [calculatedPrice, setCalculateCalculatedPrice] = useState<CalculatePriceResponse>({
-        price: 0
-    });
+    const [configValidation, setConfigValidation] = useState<boolean>(false);
+    const [calculatedPrice, setCalculateCalculatedPrice] = useState<number>(0);
 
     useEffect(() => {
         const fetchProductData = async () => {
@@ -75,8 +69,8 @@ const ConfiguratorPage: React.FC = () => {
     useEffect(() => {
         const validateAndPrice = async () => {
             if (!productId || selectedOptions.length === 0) {
-                setConfigValidation({isValid: false});
-                setCalculateCalculatedPrice({price: 0});
+                setConfigValidation(false);
+                setCalculateCalculatedPrice(0);
                 return;
             }
 
@@ -86,14 +80,13 @@ const ConfiguratorPage: React.FC = () => {
 
                 setProductOptionGroups(groupProductByGroups(productData))
 
-                const validationResult = await validateConfiguration(productId, selectedOptions);
-
-                if (validationResult.isValid) {
-                    const priceResult = await calculatePrice(productId, selectedOptions);
-                    setCalculateCalculatedPrice(priceResult);
+                if (productData.price !== undefined) {
+                    setCalculateCalculatedPrice(productData.price);
                 }
 
-                setConfigValidation(validationResult)
+                if (productData.isValidConfiguration !== undefined) {
+                    setConfigValidation(productData.isValidConfiguration)
+                }
             } catch (err) {
                 console.error('Failed to validate configuration:', err);
             }
@@ -174,8 +167,8 @@ const ConfiguratorPage: React.FC = () => {
                         selectedOptions={
                             getSelectedOptions(productOptionGroups, selectedOptions)
                         }
-                        totalPrice={calculatedPrice.price}
-                        isConfigurationValid={configValidation.isValid}
+                        totalPrice={calculatedPrice}
+                        isConfigurationValid={configValidation}
                         isAuthenticated={isAuthenticated}
                         onAddToCart={handleAddToCart}
                     />

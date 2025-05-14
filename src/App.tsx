@@ -14,6 +14,8 @@ import ProductPage from "./pages/ProductPage.tsx";
 import ProductCategoryPage from './pages/ProductCategoryPage.tsx';
 import ProductOptionPage from './pages/ProductOptionPage.tsx';
 import ProductOptionGroupPage from "./pages/ProductOptionGroupPage.tsx";
+import OptionRulePage from "./pages/OptionRule.tsx";
+import OptionPriceRulePage from "./pages/OptionPriceRule.tsx";
 
 const App: React.FC = () => {
     return (
@@ -30,6 +32,8 @@ const App: React.FC = () => {
                             <Route path="/admin/product" element={<ProductPage/>}/>
                             <Route path="/admin/product-option" element={<ProductOptionPage/>}/>
                             <Route path="/admin/product-option-group" element={<ProductOptionGroupPage/>}/>
+                            <Route path="/admin/option-rule" element={<OptionRulePage/>}/>
+                            <Route path="/admin/option-price-rule" element={<OptionPriceRulePage/>}/>
                             <Route path="/cart" element={<CartPage/>}/>
                             <Route path="/login" element={<LoginPage/>}/>
                             <Route path="/register" element={<RegisterPage/>}/>
